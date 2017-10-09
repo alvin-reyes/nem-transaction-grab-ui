@@ -1,0 +1,188 @@
+
+<div id="overlay" #overlay>
+
+	<h2>
+		Loading .. Please wait <img
+			src="https://cdn.worldvectorlogo.com/logos/nem-xem.svg" width="40"
+			height="50" />
+	</h2>
+
+</div>
+
+<div style="position: absolute; top: 10px; right: 10px;">
+	<div class="list-group">
+		<a href="#"
+			class="list-group-item list-group-item-action flex-column align-items-start"
+			style="padding: 5px; margin: 5px;">
+			<p style="font-color: white;">
+				We would really appreciate if you can report any issues by logging
+				in any issues via our public <a
+					href="https://trello.com/b/xMPycSKh/nem-transaction-explorer">Trello
+					Board</a>
+
+
+			</p>
+		</a>
+	</div>
+</div>
+<!-- <button (click)="addRow()">add row</button> -->
+<div id="hiddenLastHash" style="display: none;"></div>
+<div class="row" style="font-size:12px;">
+
+	<div class="col-1">
+
+		<div class="form-group" style="padding: 0px 0px 15px 0px;">
+			<label for="networkId">Network:</label> <select #selectElem
+				class="form-control" id="networkId"
+				(change)="networkChange(selectElem.value)">
+				<option value="mainnet" selected="selected">Mainnet</option>
+				<option value="testnet">Testnet</option>
+			</select>
+		</div>
+	</div>
+	<div class="col">
+
+		<div class="form-group" style="padding: 0px 0px 15px 0px;">
+			<label for="nodeId">Node:</label> <select #selectElemHost
+				class="form-control" id="nodeId"
+				(change)="hostChange(selectElemHost.value)">
+				<option *ngFor="let node of selectedNetwork[0].nodes" [value]="node">{{node}}</option>
+			</select>
+
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group" style="padding: 0px 0px 15px 0px;"
+			*ngIf="enableCustom == true">
+			<label for="nodeId">Custom Node:</label> <input
+				[(ngModel)]="customHost" type="text" placeholder="Custom Host"
+				(blur)="hostChangeBlur()" class="form-control" />
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="alert alert-success" role="alert" id="incomingTotalPane">
+			<p>
+				<b>IN Total</b>
+			</p>
+			<p id="incomingTotal">000000000</p>
+		</div>
+	</div>
+	<div class="col">
+		<div class="alert alert-success" role="alert" id="outgoingTotalPane">
+			<p>
+				<b>OUT Total</b>
+			</p>
+			<p id="outgoingTotal">000000000</p>
+		</div>
+	</div>
+	<div class="col">
+		<div class="alert alert-success" role="alert" id="totalPane">
+			<p>
+				<b>Net (I - O)</b>
+			</p>
+			<p id="total">000000000</p>
+		</div>
+	</div>
+
+
+	<div class="col">
+		<div class="alert alert-success" role="alert" id="totalMosaics" >
+			<p>
+				<b>Mosaic Total</b>
+			</p>
+			<div id="mosaicTotalFilter" >
+				<p id="total">000000000</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+
+	<div class="col-12">
+		<div class="input-group" style="padding: 0px 0px 15px 0px;">
+			<span class="input-group-btn"> <a class="btn btn-primary"
+				type="button" (click)="getAllTransactions()" style="cursor: pointer;">All</a> <a
+				class="btn btn-primary" type="button"
+				(click)="filterByIncomingOnly()" style="cursor: pointer;">Incoming</a>
+				<a class="btn btn-primary" type="button"
+				(click)="filterByOutgoingOnly()" style="cursor: pointer;">Outgoing</a>
+				<!-- <a class="btn btn-primary" type="button"
+				(click)="filterByFirst25Only()" style="cursor: pointer;">25</a>
+				 -->
+			</span> <input [(ngModel)]="address" type="text" class="form-control"
+				id="address" required aria-describedby="addressHelp"
+				placeholder="Address">
+		</div>
+	</div>
+</div>
+<div class="alert alert-danger alert-dismissible fade show" role="alert"
+	id="errorPane" style="display: none;">
+	<button type="button" class="close" data-dismiss="alert"
+		aria-label="Close" (click)="closeErrorPane()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<p id="errorId"></p>
+</div>
+<div id="filterBar" style="display: none;">
+	<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+		<form class="form-inline">
+			<div id="currencyFilter">
+				<select class="custom-select"><option value="">Filter
+						by Currency</option></select>
+			</div>
+			&nbsp;
+			<div id="incomingOutgoingFilter">
+				<select class="custom-select"><option value="">Filter
+						by Incoming/Outgoing</option></select>
+			</div>
+		</form>
+	</nav>
+</div>
+
+
+
+<div class="alert alert-danger alert-dismissible fade show" role="alert"
+	*ngIf="errorFlag == true" id="errorPane">
+	<button type="button" class="close" data-dismiss="alert"
+		aria-label="Close" (click)="closeError()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<p id="errorId">{{errorMessage}}</p>
+</div>
+<br />
+<table id="allTrans" class="row-border hover" style="font-size: 14px;">
+	<thead>
+		<tr>
+			<th>IN/OUT</th>
+			<th>Sender</th>
+			<th>Recipient</th>
+			<th>Currency Type</th>
+			<th>Amount</th>
+			<th>XEM Fee</th>
+			<th>Net XEM Txn</th>
+			<th>Mosaics</th>
+			<th>Date</th>
+			<th>Message</th>
+			<th>Hash</th>
+			<th>Links</th>
+
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>IN/OUT</th>
+			<th>Sender</th>
+			<th>Recipient</th>
+			<th>Currency Type</th>
+			<th>Amount</th>
+			<th>XEM Fee</th>
+			<th>Net XEM Txn</th>
+			<th>Mosaics</th>
+			<th>Date</th>
+			<th>Message</th>
+			<th>Hash</th>
+			<th>Links</th>
+		</tr>
+	</tfoot>
+</table>

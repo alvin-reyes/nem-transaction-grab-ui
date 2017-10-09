@@ -1,0 +1,18 @@
+#overlay {
+	display: none; /* Default visible!! */
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	 z-index: 99999;
+	background-color: rgba(255, 255, 255, 0.90);
+}
+
+#overlay h2 {
+	position: fixed;
+	margin-left: 40%;
+	top: 40%;
+}
+
+td {word-wrap: break-word}

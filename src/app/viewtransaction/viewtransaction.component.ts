@@ -84,8 +84,8 @@ export class ViewTransactionComponent implements OnInit {
       $('#outgoingTotalPane').css('display', 'none');
       $('#totalMosaics').css('display', 'none');
     });
-    this.network = 'mainnet';
-    this.networkChange('mainnet'); // default.
+    this.network = 'mainnet'; //
+    this.networkChange('mainnet'); // default
 
   }
 
@@ -201,6 +201,7 @@ export class ViewTransactionComponent implements OnInit {
         $('#overlay').show();
         var outgoingTotal = 0;
         var incomingTotal = 0;
+        var harvestInfoTotal = (data['harvestFeeTotal'] == undefined ? 0 : data['harvestFeeTotal']);
         var total = 0;
 
         for (let index = 0; index < data['data'].length; index++) {
@@ -228,7 +229,7 @@ export class ViewTransactionComponent implements OnInit {
             }
             total += data['data'][index]['amountTotal'];
           }
-          $('#total').html((incomingTotal - outgoingTotal));
+          $('#total').html((Math.abs(((incomingTotal - outgoingTotal) + harvestInfoTotal)) / 1000000).toFixed(6));
           $('#incomingTotal').html(incomingTotal);
           $('#outgoingTotal').html(outgoingTotal);
           $('#hiddenLastHash').html(data['data'][data['data'].length - 1]['hash']);
@@ -344,7 +345,7 @@ export class ViewTransactionComponent implements OnInit {
 
         ],
         'footerCallback': function(row, data, start, end, display) {
-
+          var harvestInfoTotal = (data['harvestFeeTotal'] == undefined ? 0 : data['harvestFeeTotal']);
           if (data.length > 0) {
             for (let index = 0; index < data.length; index++) {
               var amount = data[index]['amount'];
@@ -357,7 +358,7 @@ export class ViewTransactionComponent implements OnInit {
               }
               total += data[index]['amountTotal'];
             }
-            $('#total').html((Math.abs((incomingTotal - outgoingTotal)) / 1000000).toFixed(6));
+            $('#total').html((Math.abs(((incomingTotal - outgoingTotal) + harvestInfoTotal)) / 1000000).toFixed(6));
             $('#incomingTotal').html(incomingTotal.toFixed(6));
             $('#outgoingTotal').html(outgoingTotal.toFixed(6));
             $('#hiddenLastHash').html(data[data.length - 1]['hash']);
@@ -525,6 +526,7 @@ export class ViewTransactionComponent implements OnInit {
           if (data.length > 0) {
             var outgoingTotal = 0;
             var incomingTotal = 0;
+            var harvestInfoTotal = (data['harvestFeeTotal'] == undefined ? 0 : data['harvestFeeTotal']);
             var total = 0;
             var mosaics = [];
             for (let index = 0; index < data.length; index++) {
@@ -548,15 +550,15 @@ export class ViewTransactionComponent implements OnInit {
               }
             }
             var mosaicStr = '';
+            var divisibility = mosaics[0].divisibility;
             for (var mindx = 0; mindx < mosaics.length; mindx++) {
               var io = (mosaics[mindx].type == 'INCOMING' ? 'IN' : 'OUT');
-
               mosaicStr += io + ' : ' + mosaics[mindx].name + ' : ' + (mosaics[mindx].sum) / Math.pow(10, mosaics[mindx].divisibility) + '</br>';
             }
-            console.log(mosaics);
-            $('#total').html((Math.abs((incomingTotal - outgoingTotal)) / 1000000).toFixed(6));
-            $('#incomingTotal').html((incomingTotal / 1000000).toFixed(6));
-            $('#outgoingTotal').html((outgoingTotal / 1000000).toFixed(6));
+
+            $('#total').html((Math.abs(((incomingTotal - outgoingTotal) + harvestInfoTotal)) / 1000000).toFixed(divisibility));
+            $('#incomingTotal').html((incomingTotal / 1000000).toFixed(divisibility));
+            $('#outgoingTotal').html((outgoingTotal / 1000000).toFixed(divisibility));
             $('#mosaicTotalFilter').html(mosaicStr);
             $('#hiddenLastHash').html(data[data.length - 1]['hash']);
           }

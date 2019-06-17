@@ -6,11 +6,11 @@ import {AppComponent} from './app.component';
 import {NgxTypeaheadModule} from 'ngx-typeahead';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {LoadingModule} from 'ngx-loading';
 import {ViewTransactionComponent} from './viewtransaction/viewtransaction.component';
 import {DataTableModule} from 'angular-4-data-table';
 import {HttpModule} from '@angular/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [

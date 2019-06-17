@@ -195,6 +195,7 @@ export class ViewTransactionComponent implements OnInit {
     console.log(hash);
     this.showloading = true;
     var addressWoDash = address.replace(/-/g, '');
+    console.log('http://138.197.132.50:' + servicePort + '/transgrab/s/network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash + '/hash/' + hash);
     this.http.get('http://138.197.132.50:' + servicePort + '/transgrab/s/network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash + '/hash/' + hash).subscribe(data => {
       // Read the result field from the JSON response.
       $(function() {
@@ -264,6 +265,7 @@ export class ViewTransactionComponent implements OnInit {
       var outgoingTotal = 0;
       var incomingTotal = 0;
       var total = 0;
+        console.log('http://138.197.132.50:' + servicePort + '/transgrab/s/network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash + '/25');
       this.table = $('#allTrans').DataTable({
         'ajax': 'http://138.197.132.50:' + servicePort + '/transgrab/s/network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash + '/25',
         'bPaginate': false,
@@ -439,7 +441,7 @@ export class ViewTransactionComponent implements OnInit {
       $('#outgoingTotal').html('000000000');
       $('#errorPane').css('display', 'none');
       var addressWoDash = address.replace(/-/g, '');
-
+console.log('http://138.197.132.50:' + servicePort + url + 'network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash);
       this.table = $('#allTrans').DataTable({
         'ajax': 'http://138.197.132.50:' + servicePort + url + 'network/' + network + '/host/' + host + '/port/' + port + '/address/' + addressWoDash,
         'bPaginate': false,
